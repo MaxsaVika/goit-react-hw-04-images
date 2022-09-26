@@ -77,7 +77,7 @@ closeModal = () => {
 
 
   render() {
-    const {images, loading, error, modalOpen, modalImg} = this.state;
+    const {images, loading, error, modalOpen} = this.state;
     const {loadMore, onSearch, openModal, closeModal} = this;
     const isImages = Boolean(images.length)
 
