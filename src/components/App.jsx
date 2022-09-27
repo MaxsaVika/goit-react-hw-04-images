@@ -1,37 +1,35 @@
 import React, { Component } from 'react'
-// import {Loader} from './shared/Loader/Loader'
 import ImageGallery from './ImageGallery/ImageGallery';
-// import { LoadMoreBtn } from './shared/LoadMoreBtn/LoadMoreBtn';
 import css from 'components/Styled/Styles.module.css';
-// import {searchApiImg} from 'components/servises/searchApi'
 import Searchbar from './Searchbar/Searchbar';
-// import Modal from './shared/Modal/Modal';
 
 export default class App extends Component {
   state = {
-        search: "", 
-        modalOpen: false,
+        search: "",
+        page: 1
       }
 
-  onSearch = ({search})=>{
+  onSearch = ({ search }) => {
       this.setState({
           search,
+          page: 1
       })
+  }
+
+  handleNextPage = () => {
+    this.setState(({page}) => ({page: page + 1}))
   }
 
 
   render() {
-        const {search} = this.state;
-        const { onSearch} = this;
+        const {search, page} = this.state;
+        const { onSearch, handleNextPage} = this;
     
         return (
           <>
-            <Searchbar onSubmit = {onSearch} />
-
-
-    
+            <Searchbar onSubmit = {onSearch} />    
             <section className={css.App}>
-              <ImageGallery search={search} />
+              <ImageGallery search={search} page={page} handleNextPage={handleNextPage} />
             </section>
           </>
           

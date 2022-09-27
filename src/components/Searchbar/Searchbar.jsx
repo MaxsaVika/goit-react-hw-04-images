@@ -5,7 +5,6 @@ import css from 'components/Styled/Styles.module.css'
 export default class Searchbar extends Component {
     state = {
         search: "",
-        page: 1,
     }
 
     handleChange = (e) => {
@@ -23,16 +22,10 @@ export default class Searchbar extends Component {
         }
 
         const {onSubmit} = this.props;
-        onSubmit({...this.state})
-
-        // this.setState( prevState => {
-        //     if
-        // })
-
+        onSubmit(this.state)
         this.setState({
             search: "",
         })
-
     }
 
   render() {
@@ -54,7 +47,6 @@ export default class Searchbar extends Component {
                     onChange = {handleChange}
                 />
             </form>
-
         </header> 
     ) 
   }

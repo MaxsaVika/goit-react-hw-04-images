@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { ImageGalleryItem } from './ImageGalleryItem';
 import css from '../Styled/Styles.module.css'
 import React, { Component } from 'react'
@@ -14,39 +14,31 @@ export default class ImageGallery extends Component {
             error: null,
             modalOpen: false,
             modalImg: "",
-            page: 1,
           }
 
-   componentDidUpdate (prevProps, prevState) {
-       const {page} = this.state
+   componentDidUpdate (prevProps) {
+       const { search, page } = this.props
 
-    //    if(page !== prevState.page){
-    //     this.fetchImages();
-    //    }
-
-        if(prevProps.search !== this.props.search || page !== prevState.page) {
-            this.fetchImages() 
-        }
-
-        if(prevProps.search !== this.props.search) {
-            this.setState({
-                images: [],
-                page: 1,
+       if (prevProps.search !== search) {
+           this.setState({
+               images: []
             })
-        }
+       }
+
+        if(prevProps.search !== search || page !== prevProps.page) {
+            this.fetchImages() 
+        }    
    }
 
    async fetchImages(){
-        const {page} = this.state;
-
-        console.log();
+    const { search, page } = this.props
     
         this.setState({
             loading: true,
         })
     
         try{
-            const data = await searchApiImg(this.props.search, page);
+            const data = await searchApiImg(search, page);
 
                 this.setState(({images})=>{
                     return {
@@ -63,11 +55,7 @@ export default class ImageGallery extends Component {
     }
 
     loadMore = () => {
-          this.setState(({page}) => { 
-            return {
-              page: page + 1,
-            }
-          })
+        this.props.handleNextPage()
     }
 
     openModal = (modalImg) => {
@@ -110,7 +98,6 @@ export default class ImageGallery extends Component {
             }
             {isImages && <LoadMoreBtn onLoadMore = {loadMore}/>}
 
-
             {modalOpen && <Modal onClose = {closeModal}>
              <img src={modalImg} alt ="" />
            </Modal>}
@@ -120,32 +107,10 @@ export default class ImageGallery extends Component {
   }
 }
 
-
-
-// const ImageGallery = ({images=[], onClick}) =>{
-//     return (
-//         <ul className={css.ImageGallery}>
-//             {images.map(({ id, tags, webformatURL, largeImageURL }) => {
-//                 return (
-//                     <ImageGalleryItem
-//                     key={id}
-//                     alt = {tags}
-//                     webformatURL={webformatURL}
-//                     largeImageURL={largeImageURL}
-//                     onClick={onClick} />
-//                 )
-//             })}
-//         </ul>
-//     )
-// }
-
-// ImageGallery.propTypes = {
-//     images: PropTypes.array,
-//     onClick: PropTypes.func,
-//     id: PropTypes.number,
-//     tags: PropTypes.string,
-//     webformatURL: PropTypes.string,
-//     largeImageURL: PropTypes.string,
-// }
-
-// export default ImageGallery
+ImageGallery.propTypes = {
+    images: PropTypes.array,
+    id: PropTypes.number,
+    webformatURL: PropTypes.string,
+    largeImageURL: PropTypes.string,
+    tags: PropTypes.string
+}
