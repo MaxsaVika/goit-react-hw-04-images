@@ -28,7 +28,8 @@
   padding-top: 12px;
   padding-bottom: 12px;
   color: #fff;
-  background-color: #3f51b5;
+  background-color: #ca3305f6;
+  /* background-color: #3f51b5; */
   box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
     0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }
@@ -147,20 +148,23 @@
 }
 
 .modal {
-  width: 200px;
- height: 200px;
- background-color: #3f51b5;
-  /* max-width: calc(100vw - 48px);
-  max-height: calc(100vh - 24px); */
+  max-width: calc(100vw - 148px);
+  max-height: calc(100vh - 74px);
 }
 
 .modal_close_btn{
   position: absolute;
-  top: 2px;
-  right: 2px;
-  border: #f15b2d;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  font-weight: 600;
+  border-radius: 50%;
+  text-align: center;
+  border: 1px solid #f15b2d;
+  font-size: 18px;
   color: #f15b2d;
   cursor: pointer;
+  background-color: transparent;
 }
 
 /*

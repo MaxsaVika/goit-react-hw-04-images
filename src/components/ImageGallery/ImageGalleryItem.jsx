@@ -7,9 +7,10 @@ export const ImageGalleryItem = ({id, tags, webformatURL, largeImageURL, onClick
             <img 
                 src={webformatURL} 
                 alt = {tags} 
+                loading='lazy'
                 className={css.ImageGalleryItem_image} 
                 onClick={() => {
-                        onClick({largeImageURL});
+                        onClick(largeImageURL);
                     }}>
             </img>
         </li>

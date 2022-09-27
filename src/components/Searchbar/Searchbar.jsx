@@ -5,6 +5,7 @@ import css from 'components/Styled/Styles.module.css'
 export default class Searchbar extends Component {
     state = {
         search: "",
+        page: 1,
     }
 
     handleChange = (e) => {
@@ -16,15 +17,22 @@ export default class Searchbar extends Component {
 
     handleSubmit = (e)=> {
         e.preventDefault()
+
+        if(this.state.search.trim() === "") {
+           return  alert('Enter category of images for search.')
+        }
+
         const {onSubmit} = this.props;
         onSubmit({...this.state})
-        this.reset()
-    }
 
-    reset() {
+        // this.setState( prevState => {
+        //     if
+        // })
+
         this.setState({
             search: "",
         })
+
     }
 
   render() {

@@ -27,7 +27,7 @@ export default class Modal extends Component {
     return  createPortal(
         <div className={css.overlay} onClick={closeModal}>
             <div className={css.modal}>
-                <button className={css.modal_close_btn} type="button" onClick={closeModal}>x</button>
+                <button className={css.modal_close_btn} type="button" onClick={closeModal}>X</button>
                 {children}
             </div>
         </div>, modalRoot
