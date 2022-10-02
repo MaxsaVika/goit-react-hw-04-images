@@ -1,36 +1,25 @@
-import React, { Component } from 'react'
+// import React, { Component } from 'react'
+import { useState } from 'react'
 import {ImSearch} from 'react-icons/im';
 import css from 'components/Styled/Styles.module.css'
 
-export default class Searchbar extends Component {
-    state = {
-        search: "",
+export default function Searchbar({onSubmit}) {
+    const [search, setSearch] = useState('')
+
+    const handleChange = ({target: {value}}) => {
+        setSearch(value)
     }
 
-    handleChange = (e) => {
-        const {value, name} = e.target
-        this.setState({
-            [name]: value
-        })
-    }
-
-    handleSubmit = (e)=> {
+    const handleSubmit = (e)=> {
         e.preventDefault()
 
-        if(this.state.search.trim() === "") {
+        if(search.trim() === "") {
            return  alert('Enter category of images for search.')
         }
 
-        const {onSubmit} = this.props;
-        onSubmit(this.state)
-        this.setState({
-            search: "",
-        })
+        onSubmit(search)
+        setSearch('')
     }
-
-  render() {
-    const {handleSubmit, handleChange} = this
-    const {search} = this.state;
 
     return (
         <header className={css.Searchbar}>
@@ -48,6 +37,5 @@ export default class Searchbar extends Component {
                 />
             </form>
         </header> 
-    ) 
-  }
+    )
 }

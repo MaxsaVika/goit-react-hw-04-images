@@ -1,86 +1,63 @@
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ImageGalleryItem } from './ImageGalleryItem';
 import css from '../Styled/Styles.module.css'
-import React, { Component } from 'react'
 import {searchApiImg} from 'components/servises/searchApi'
 import {Loader} from '../shared/Loader/Loader'
 import { LoadMoreBtn } from '../shared/LoadMoreBtn/LoadMoreBtn'
 import Modal from '../shared/Modal/Modal';
 
-export default class ImageGallery extends Component {
-    state = {
-            images: [],
-            loading: false,
-            error: null,
-            modalOpen: false,
-            modalImg: "",
-          }
+export default function ImageGallery({ search, page, handleNextPage }) {
 
-   componentDidUpdate (prevProps) {
-       const { search, page } = this.props
+    const[images, setImages] = useState([])
+    const[loading, setLoading] = useState(false)
+    const[error, setError] = useState(null)
+    const[modalOpen, setModalOpen] = useState(false)
+    const[modalImg, setModalImg] = useState('')
 
-       if (prevProps.search !== search) {
-           this.setState({
-               images: []
-            })
-       }
-
-        if(prevProps.search !== search || page !== prevProps.page) {
-            this.fetchImages() 
-        }    
-   }
-
-   async fetchImages(){
-    const { search, page } = this.props
-    
-        this.setState({
-            loading: true,
-        })
-    
-        try{
-            const data = await searchApiImg(search, page);
-
-                this.setState(({images})=>{
-                    return {
-                        images: [...images, ...data.hits],
-                    }
-            })
-            } catch (error) {
-                this.setState({error})
-    
-            } finally {
-                this.setState({loading: false,})
-            }
-    
-    }
-
-    loadMore = () => {
-        this.props.handleNextPage()
-    }
-
-    openModal = (modalImg) => {
-        this.setState({
-          modalOpen: true,
-          modalImg,
-        })
-      }
-      
-      closeModal = () => {
-        this.setState({
-          modalOpen: false,
-          modalImg: "",
-        })
-      }
-    
-  render() {
-    const {images, loading, error, modalOpen, modalImg} = this.state
-    const {loadMore, openModal, closeModal} = this
     const isImages = Boolean(images.length)
 
+    useEffect(() => {
+        setImages([])
+    }, [search])
+
+    useEffect(() =>{
+        if (!search) return
+
+        const fetchImages = async ()=> {
+            
+            setLoading(true)
+            
+            try{
+                const data = await searchApiImg(search, page);
+                setImages((prevImages) => [...prevImages, ...data.hits])
+
+            } catch (error) {
+                setError(error)
+            
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchImages()
+    }, [search, page])
+
+    const loadMore = () => {
+        handleNextPage()
+    }
+
+    const openModal = (modalImg) => {
+        setModalOpen(true)
+        setModalImg(modalImg)
+      }
+      
+    const closeModal = () => {
+        setModalOpen(false)
+        setModalImg('')
+    }
+
     return (
-        <section className={css.App}>
-          {error && <p>Try later...</p>}
-          {loading && <Loader />}
+        <>
           {isImages && 
                 <ul className={css.ImageGallery}>
                     {images.map(({ id, tags, webformatURL, largeImageURL }) => {
@@ -96,15 +73,17 @@ export default class ImageGallery extends Component {
                     })}
                 </ul>
             }
-            {isImages && <LoadMoreBtn onLoadMore = {loadMore}/>}
+            {error && <p>Try later...</p>}
+            {/* <div> */}
+                {loading && <Loader />}
+                {isImages && !loading && <LoadMoreBtn onLoadMore = {loadMore}/>}
+            {/* </div> */}
 
             {modalOpen && <Modal onClose = {closeModal}>
              <img src={modalImg} alt ="" />
            </Modal>}
-
-        </section>     
+        </>    
     )
-  }
 }
 
 ImageGallery.propTypes = {
